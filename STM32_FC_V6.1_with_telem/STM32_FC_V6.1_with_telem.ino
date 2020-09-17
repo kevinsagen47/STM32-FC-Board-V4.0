@@ -47,17 +47,17 @@ int abspitch;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //PID gain and limit settings
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-float pid_p_gain_roll = 0.13;               //1.2Gain setting for the pitch and roll P-controller (default = 1.3).
+float pid_p_gain_roll = 0.3;               //1.2Gain setting for the pitch and roll P-controller (default = 1.3).
 float pid_i_gain_roll = 0.0012;              //0.04Gain setting for the pitch and roll I-controller (default = 0.04).
 float pid_d_gain_roll = 7.0;              //Gain setting for the pitch and roll D-controller (default = 18.0).
 int pid_max_roll = 400;                    //Maximum output of the PID-controller (+/-).
 
-float pid_p_gain_pitch = 0.13;  //Gain setting for the pitch P-controller.
+float pid_p_gain_pitch = 0.3;  //Gain setting for the pitch P-controller.
 float pid_i_gain_pitch = 0.0025;  //Gain setting for the pitch I-controller.
 float pid_d_gain_pitch = 6.58;  //Gain setting for the pitch D-controller.
 int pid_max_pitch = pid_max_roll;          //Maximum output of the PID-controller (+/-).
 
-float pid_p_gain_yaw = 1.0;                //Gain setting for the pitch P-controller (default = 4.0).
+float pid_p_gain_yaw = 0.5;                //Gain setting for the pitch P-controller (default = 4.0).
 float pid_i_gain_yaw = 0.001;               //Gain setting for the pitch I-controller (default = 0.02).
 float pid_d_gain_yaw = 0.01;                //Gain setting for the pitch D-controller (default = 0.0).
 int pid_max_yaw = 400;                     //Maximum output of the PID-controller (+/-).
@@ -72,7 +72,7 @@ int shutoff=0;
  float battery_compensation = 40.0;         
 
 float pid_p_gain_altitude = 3.0;           //Gain setting for the altitude P-controller (default = 1.4).
-float pid_i_gain_altitude = 0.35 ;           //Gain setting for the altitude I-controller (default = 0.2).
+float pid_i_gain_altitude = 0.12 ;           //Gain setting for the altitude I-controller (default = 0.2).
 float pid_d_gain_altitude = 0.75 ;          //Gain setting for the altitude D-controller (default = 0.75).
 int pid_max_altitude = 400;                //Maximum output of the PID-controller (+/-).
 
@@ -209,7 +209,7 @@ float adjustable_setting_1, adjustable_setting_2, adjustable_setting_3;
 int updateee,updated,nextexpect=1700;
 unsigned long current;
 unsigned long MovedTimer, MovedCurrent;
-int initial_altitude_set=0;
+int initial_altitude_set=0,shit=0;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Setup routine
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -300,7 +300,7 @@ void setup() {
   radio.openWritingPipe(address);
   radio.setAutoAck(false);
   radio.setDataRate(RF24_250KBPS);
-  radio.setPALevel(RF24_PA_LOW);
+  radio.setPALevel(RF24_PA_HIGH);
   //When everything is done, turn off the led.
   red_led(LOW);                                                 //Set output PB4 low.
 
@@ -355,7 +355,7 @@ battery_voltage = 15;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void loop() {
   //Some functions are only accessible when the quadcopter is off.
-  
+  /*
   if (start == 0) {
   
     //For compass calibration move both sticks to the top right.
@@ -377,10 +377,10 @@ void loop() {
       }
     }
     if (channel_6 < 1900)previous_channel_6 = 0;
-    */
+    
     green_led(HIGH);
   }
-
+*/
   heading_lock = 0;
   
   //if (channel_6 > 1200)heading_lock = 1;                                           //If channel 6 is between 1200us and 1600us the flight mode is 2
@@ -390,6 +390,7 @@ void loop() {
     flight_mode = 2;                       //If channel 6 is between 1200us and 1600us the flight mode is 2
     //heading_lock=1;  
   }
+  
   MovedCurrent=millis();
   if (channel_5 >= 1800 && channel_5 < 2100){                       //If channel 6 is between 1600us and 1900us the flight mode is 3
   if((MovedCurrent-MovedTimer)>=500)flight_mode = 3;
@@ -434,8 +435,8 @@ void loop() {
   angle_roll += angle_pitch * sin((float)gyro_yaw * 0.000001066);                  //If the IMU has yawed transfer the pitch angle to the roll angel.
 
   //angle_yaw -= course_deviation(angle_yaw, actual_compass_heading) / 1200.0;       //Calculate the difference between the gyro and compass heading and make a small correction.
-  if (angle_yaw < 0) angle_yaw += 360;                                             //If the compass heading becomes smaller then 0, 360 is added to keep it in the 0 till 360 degrees range.
-  else if (angle_yaw >= 360) angle_yaw -= 360;                                     //If the compass heading becomes larger then 360, 360 is subtracted to keep it in the 0 till 360 degrees range.
+  //if (angle_yaw < 0) angle_yaw += 360;                                             //If the compass heading becomes smaller then 0, 360 is added to keep it in the 0 till 360 degrees range.
+  //else if (angle_yaw >= 360) angle_yaw -= 360;                                     //If the compass heading becomes larger then 360, 360 is subtracted to keep it in the 0 till 360 degrees range.
 
 
   //Accelerometer angle calculations
@@ -462,12 +463,13 @@ void loop() {
   //At startup the heading is registerd in the variable course_lock_heading.
   //First the course deviation is calculated between the current heading and the course_lock_heading is calculated.
   //Based on this deviation the pitch and roll controls are calculated so the responce is the same as on startup.
+ /*
   if (heading_lock == 1) {
     heading_lock_course_deviation = course_deviation(angle_yaw, course_lock_heading);
     pid_roll_setpoint_base = 1500 + ((float)(channel_1 - 1500) * cos(heading_lock_course_deviation * 0.017453)) + ((float)(channel_2 - 1500) * cos((heading_lock_course_deviation - 90) * 0.017453));
     pid_pitch_setpoint_base = 1500 + ((float)(channel_2 - 1500) * cos(heading_lock_course_deviation * 0.017453)) + ((float)(channel_1 - 1500) * cos((heading_lock_course_deviation + 90) * 0.017453));
   }
-
+*/
   if (flight_mode >= 3 && waypoint_set == 1) {
     pid_roll_setpoint_base += gps_roll_adjust;
     pid_pitch_setpoint_base += gps_pitch_adjust;
@@ -495,9 +497,10 @@ void loop() {
 
   //The variable base_throttle is calculated in the following part. It forms the base throttle for every motor.
   if (takeoff_detected == 1 && start == 2) {                                         //If the quadcopter is started and flying.
-    throttle = channel_3 + takeoff_throttle;                                         //The base throttle is the receiver throttle channel + the detected take-off throttle.
+    throttle = channel_3;// + takeoff_throttle;                                         //The base throttle is the receiver throttle channel + the detected take-off throttle.
+    //if(flight_mode==1)shit=1;
     if (flight_mode >= 2) {                                                          //If altitude mode is active.
-      throttle = 1300 + takeoff_throttle + pid_output_altitude + manual_throttle;    //The base throttle is the receiver throttle channel + the detected take-off throttle + the PID controller output.
+      throttle = 1300  + pid_output_altitude + manual_throttle;    //+ takeoff_throttle The base throttle is the receiver throttle channel + the detected take-off throttle + the PID controller output.
     }
   } 
   if (last==2){
@@ -563,8 +566,9 @@ void loop() {
     Serial.print(esc_3);
     Serial.print(" - ");
     Serial.println(esc_4);
-    Serial.println(start);
-  */
+    */
+    Serial.println(throttle);
+  
   /*
   Serial.print(lat_gps_actual);
   Serial.print(" - ");
@@ -573,6 +577,7 @@ void loop() {
   Serial.println(number_used_sats);
   */
    // Serial.println(micros() - loop_timer);
+   //Serial.println(angle_yaw);
   /*
   Serial.print(channel_1);
   Serial.print(" - ");
@@ -585,9 +590,9 @@ void loop() {
   Serial.print(channel_5);
   Serial.print(" - ");
   Serial.println(channel_6);
-  Serial.println(start);
+  //Serial.println(parachute_throttle);
 */
-Serial.println(actual_compass_heading);
+//Serial.println(actual_compass_heading);
 //Serial.println(angle_yaw);
   if (micros() - loop_timer > 4050)error = 2;                                      //Output an error if the loop time exceeds 4050us.
   while (micros() - loop_timer < 4000);                                            //We wait until 4000us are passed.
