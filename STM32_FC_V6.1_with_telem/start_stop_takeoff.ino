@@ -9,7 +9,7 @@ void start_stop_takeoff(void) {
     //initial_altitude_set=1;
     
     if(initial_altitude_set==0) {
-      pid_altitude_setpoint=actual_pressure-1;
+      pid_altitude_setpoint=actual_pressure-20;
       initial_altitude_set=1;
     }
     

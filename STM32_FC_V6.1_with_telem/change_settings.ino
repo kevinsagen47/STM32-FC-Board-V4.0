@@ -4,6 +4,7 @@
 //Changing the settings is explained in this video:
 //https://youtu.be/ys-YpOaA2ME
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*
 void change_settings(void) {
   red_led(HIGH);
   green_led(LOW);
@@ -38,3 +39,4 @@ void change_settings(void) {
   loop_timer = micros();                                                           //Set the timer for the next loop.
   red_led(LOW);
 }
+*/

@@ -1,6 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //In this part the level and compass calibration procedres are handled.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*
 void calibrate_compass(void) {
   compass_calibration_on = 1;                                                //Set the compass_calibration_on variable to disable the adjustment of the raw compass values.
   red_led(HIGH);                                                             //The red led will indicate that the compass calibration is active.
@@ -95,3 +96,4 @@ void calibrate_level(void) {
   angle_roll = angle_roll_acc;
   loop_timer = micros();                                                           //Set the timer for the next loop.
 }
+*/

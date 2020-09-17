@@ -355,9 +355,9 @@ battery_voltage = 15;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void loop() {
   //Some functions are only accessible when the quadcopter is off.
-  /*
-  if (start == 0) {
   
+  if (start == 0) {
+  /*
     //For compass calibration move both sticks to the top right.
     if (channel_1 > 1700 && channel_2 < 1300 && channel_3 > 1700 && channel_4 > 1700)calibrate_compass();
     //Level calibration move both sticks to the top left.
@@ -377,10 +377,10 @@ void loop() {
       }
     }
     if (channel_6 < 1900)previous_channel_6 = 0;
-    
+    */
     green_led(HIGH);
   }
-*/
+
   heading_lock = 0;
   
   //if (channel_6 > 1200)heading_lock = 1;                                           //If channel 6 is between 1200us and 1600us the flight mode is 2
@@ -404,7 +404,7 @@ void loop() {
   error_signal();                                                                  //Show the error via the red LED.
   gyro_signalen();                                                                 //Read the gyro and accelerometer data.
   read_barometer();                                                                //Read and calculate the barometer data.
-  read_compass();                                                                  //Read and calculate the compass data.
+ // read_compass();                                                                  //Read and calculate the compass data.
 
   if (gps_add_counter >= 0)gps_add_counter --;
 

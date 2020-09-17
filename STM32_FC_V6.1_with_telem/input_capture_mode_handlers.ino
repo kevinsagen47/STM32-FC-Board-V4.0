@@ -25,15 +25,16 @@ void handler_channel_1(void) {
   }
   
   if (channel_select_counter == 2){
-    if(flight_mode==1){
+   if(flight_mode==1){ 
     now2 = map(measured_time,1000,2000,1200,1800);
     channel_2=now2*(float)0.8+channel_2*(float)0.2;
-    }
-    else{
-      now2 = map(measured_time,1000,2000,1250,1750);//1350,1650
+   }
+   else{
+     now2 = map(measured_time,1000,2000,1250,1750);
     channel_2=now2*(float)0.8+channel_2*(float)0.2;
-    }
-    }
+   }
+  
+  }
   if (channel_select_counter == 3){
   if(flight_mode==1){
     channel_3 = map(measured_time,1000,2000,1000,1700);
