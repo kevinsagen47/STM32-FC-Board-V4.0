@@ -24,8 +24,8 @@ void send_telemetry_data(void) {
  data.altitude_meters= 1000 + ((ground_pressure - actual_pressure) * 0.0842);
  data.error=error;
  data.number_used_sats=number_used_sats;
-// data.l_lat_gps=l_lat_gps;
- //data.l_lon_gps=l_lon_gps;
+ data.l_lat_gps=l_lat_gps;
+ data.l_lon_gps=l_lon_gps;
  
 if(angle_roll<0){
  absroll=abs(angle_roll);
@@ -49,11 +49,8 @@ else{
 data.rssi=channel_8;
 data.bat1=map(analogRead(PA4),0,3903,0,1680);
 data.bat2=map(analogRead(PA1),0,3811,0,840);
-
-data.throttle1=(pid_p_gain_altitude + pid_error_gain_altitude) * pid_error_temp;
-data.throttle2=pid_i_mem_altitude;
-data.throttle3=pid_d_gain_altitude * parachute_throttle;
-data.throttle=throttle;
+shit2=(int)pid_error_temp;
+data.throttle=(pid_p_gain_altitude + pid_error_gain_altitude) * pid_error_temp;
 radio.write(&data, sizeof(Data_Package));
 
 /*

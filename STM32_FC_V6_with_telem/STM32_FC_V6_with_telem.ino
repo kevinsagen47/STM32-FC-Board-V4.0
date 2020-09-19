@@ -47,12 +47,12 @@ int abspitch;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //PID gain and limit settings
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-float pid_p_gain_roll = 0.13;               //1.2Gain setting for the pitch and roll P-controller (default = 1.3).
+float pid_p_gain_roll = 0.2;               //1.2Gain setting for the pitch and roll P-controller (default = 1.3).
 float pid_i_gain_roll = 0.0012;              //0.04Gain setting for the pitch and roll I-controller (default = 0.04).
 float pid_d_gain_roll = 7.0;              //Gain setting for the pitch and roll D-controller (default = 18.0).
 int pid_max_roll = 400;                    //Maximum output of the PID-controller (+/-).
 
-float pid_p_gain_pitch = 0.13;  //Gain setting for the pitch P-controller.
+float pid_p_gain_pitch = 0.2;  //Gain setting for the pitch P-controller.
 float pid_i_gain_pitch = 0.0025;  //Gain setting for the pitch I-controller.
 float pid_d_gain_pitch = 6.58;  //Gain setting for the pitch D-controller.
 int pid_max_pitch = pid_max_roll;          //Maximum output of the PID-controller (+/-).

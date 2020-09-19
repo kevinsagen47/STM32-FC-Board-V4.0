@@ -37,14 +37,10 @@ struct Data_Package {
   byte altitude_meters;
   byte error;
   byte number_used_sats;
-  //int l_lat_gps;
-  //int l_lon_gps;
+  int l_lat_gps;
+  int l_lon_gps;
   byte start;
-  short throttle1;
-  short throttle2;
-  short throttle3;
   short throttle;
-  
 };
 Data_Package data;
 int absroll;
@@ -76,9 +72,9 @@ unsigned long currenttimee;
 int shutoff=0;
  float battery_compensation = 40.0;         
 
-float pid_p_gain_altitude = 1.4;           //Gain setting for the altitude P-controller (default = 1.4).
-float pid_i_gain_altitude = 0.2 ;           //Gain setting for the altitude I-controller (default = 0.2).
-float pid_d_gain_altitude = 0.75 ;          //Gain setting for the altitude D-controller (default = 0.75).
+float pid_p_gain_altitude = 2.0;           //Gain setting for the altitude P-controller (default = 1.4).
+float pid_i_gain_altitude = 0.12 ;           //Gain setting for the altitude I-controller (default = 0.2).
+float pid_d_gain_altitude = 0.25 ;          //Gain setting for the altitude D-controller (default = 0.75).
 int pid_max_altitude = 400;                //Maximum output of the PID-controller (+/-).
 
 float gps_p_gain = 2.7;                    //Gain setting for the GPS P-controller (default = 2.7).
@@ -154,6 +150,7 @@ uint32_t loop_timer, error_timer, flight_mode_timer;
 
 float roll_level_adjust, pitch_level_adjust;
 float pid_error_temp;
+int shit2;
 float pid_i_mem_roll, pid_roll_setpoint, gyro_roll_input, pid_output_roll, pid_last_roll_d_error;
 float pid_i_mem_pitch, pid_pitch_setpoint, gyro_pitch_input, pid_output_pitch, pid_last_pitch_d_error;
 float pid_i_mem_yaw, pid_yaw_setpoint, gyro_yaw_input, pid_output_yaw, pid_last_yaw_d_error;
@@ -398,13 +395,12 @@ void loop() {
   
   MovedCurrent=millis();
   if (channel_5 >= 1800 && channel_5 < 2100){                       //If channel 6 is between 1600us and 1900us the flight mode is 3
-  /*
   if((MovedCurrent-MovedTimer)>=500)flight_mode = 3;
   else flight_mode=2;
   
   if(channel_2>1510 || channel_2<1490 || channel_1>1510 || channel_1<1490) MovedTimer=millis();
- */
-  flight_mode = 3;
+ 
+  
   }
   flight_mode_signal();                                                            //Show the flight_mode via the green LED.
   error_signal();                                                                  //Show the error via the red LED.
@@ -505,8 +501,9 @@ void loop() {
   if (takeoff_detected == 1 && start == 2) {                                         //If the quadcopter is started and flying.
     throttle = channel_3;// + takeoff_throttle;                                         //The base throttle is the receiver throttle channel + the detected take-off throttle.
     //if(flight_mode==1)shit=1;
-    if (flight_mode >= 2&&channel_2>1485)throttle = 1300  + takeoff_throttle+ pid_output_altitude + manual_throttle;    //+ takeoff_throttle The base throttle is the receiver throttle channel + the detected take-off throttle + the PID controller output.
-    else if(flight_mode>=2&&channel_2<1485) throttle = 1315  + takeoff_throttle+ pid_output_altitude + manual_throttle;
+    if (flight_mode >= 2) {                                                          //If altitude mode is active.
+      throttle = 1300  + takeoff_throttle+ pid_output_altitude + manual_throttle;    //+ takeoff_throttle The base throttle is the receiver throttle channel + the detected take-off throttle + the PID controller output.
+    }
   } 
   if (last==2){
     red_led(HIGH);
