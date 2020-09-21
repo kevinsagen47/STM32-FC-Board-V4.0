@@ -16,14 +16,14 @@ struct Data_Package {
   byte altitude_meters;
   byte error;
   byte number_used_sats;
-  //int l_lat_gps;
-  //int l_lon_gps;
+  int l_lat_gps;
+  int l_lon_gps;
   byte start;
   short throttle;
   
-  short throttle1;
-  short throttle2;
-  short throttle3;
+  //short throttle1;
+  //short throttle2;
+  //short throttle3;
 };
 Data_Package data; //Create a variable with the above structure
 void setup() {

@@ -49,10 +49,11 @@ else{
 data.rssi=channel_8;
 data.bat1=map(analogRead(PA4),0,3903,0,1680);
 data.bat2=map(analogRead(PA1),0,3811,0,840);
-
+/*
 data.throttle1=(pid_p_gain_altitude + pid_error_gain_altitude) * pid_error_temp;
 data.throttle2=pid_i_mem_altitude;
 data.throttle3=pid_d_gain_altitude * parachute_throttle;
+*/
 data.throttle=throttle;
 radio.write(&data, sizeof(Data_Package));
 

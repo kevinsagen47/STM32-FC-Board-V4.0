@@ -37,12 +37,12 @@ struct Data_Package {
   byte altitude_meters;
   byte error;
   byte number_used_sats;
-  //int l_lat_gps;
-  //int l_lon_gps;
+  int l_lat_gps;
+  int l_lon_gps;
   byte start;
-  short throttle1;
-  short throttle2;
-  short throttle3;
+  //short throttle1;
+  //short throttle2;
+  //short throttle3;
   short throttle;
   
 };
@@ -52,6 +52,7 @@ int abspitch;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //PID gain and limit settings
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+float windup=0.05;
 float pid_p_gain_roll = 0.3;               //1.2Gain setting for the pitch and roll P-controller (default = 1.3).
 float pid_i_gain_roll = 0.0012;              //0.04Gain setting for the pitch and roll I-controller (default = 0.04).
 float pid_d_gain_roll = 7.0;              //Gain setting for the pitch and roll D-controller (default = 18.0).
@@ -75,7 +76,7 @@ unsigned long lastreceivee;
 unsigned long currenttimee;
 int shutoff=0;
  float battery_compensation = 40.0;         
-
+                                                                                  
 float pid_p_gain_altitude = 1.4;           //Gain setting for the altitude P-controller (default = 1.4).
 float pid_i_gain_altitude = 0.2 ;           //Gain setting for the altitude I-controller (default = 0.2).
 float pid_d_gain_altitude = 0.75 ;          //Gain setting for the altitude D-controller (default = 0.75).

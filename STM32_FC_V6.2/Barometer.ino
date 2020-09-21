@@ -137,8 +137,14 @@ void read_barometer(void) {
       
       
       //To prevent extreme PID-output the output must be limited.
-      if (pid_output_altitude > pid_max_altitude)pid_output_altitude = pid_max_altitude;
-      else if (pid_output_altitude < pid_max_altitude * -1)pid_output_altitude = pid_max_altitude * -1;
+      if (pid_output_altitude > pid_max_altitude){
+        pid_i_mem_altitude = pid_i_mem_altitude - windup*(pid_output_altitude - pid_max_altitude);
+        pid_output_altitude = pid_max_altitude;
+      }
+      else if (pid_output_altitude < pid_max_altitude * -1){
+        pid_i_mem_altitude = pid_i_mem_altitude - windup*(pid_output_altitude + pid_max_altitude);
+        pid_output_altitude = pid_max_altitude * -1;
+      }
     }
 
     //If the altitude hold function is disabled some variables need to be reset to ensure a bumpless start when the altitude hold function is activated again.
